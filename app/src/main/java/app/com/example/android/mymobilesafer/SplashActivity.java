@@ -1,6 +1,8 @@
 package app.com.example.android.mymobilesafer;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
@@ -9,47 +11,33 @@ import app.com.example.android.mymobilesafer.utils.UpdateVersionUtils;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private static final int MESSAGE_GET_CLOUD_VERSION = 101;
     //本地版本号
     private String mVersion;
 
-    private TextView tvVersion;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            updateUtils.getCloudVersion();
+        }
+    };
+    private UpdateVersionUtils updateUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-//                startActivity(i);
-//
-//                //启动主Activity后销毁自身
-//                finish();
-//            }
-//        }, 3000);
         mVersion= MyUtils.getVersion(getApplicationContext());
+        updateUtils = new UpdateVersionUtils(mVersion, SplashActivity.this);
 
         //初始化控件
         initView();
-
-        final UpdateVersionUtils updateUtils = new UpdateVersionUtils(mVersion,
-                SplashActivity.this);
-        new Thread() {
-            public void run() {
-                // 获取服务器版本号
-                updateUtils.getCloudVersion();
-            }
-        }.start();
-
+        handler.sendEmptyMessageDelayed(MESSAGE_GET_CLOUD_VERSION,500);
     }
 
     private void initView() {
-        tvVersion= (TextView) findViewById(R.id.tv_version);
+        TextView tvVersion= (TextView) findViewById(R.id.tv_version);
         tvVersion.setText("版本号:"+mVersion);
-
     }
-
-
 }

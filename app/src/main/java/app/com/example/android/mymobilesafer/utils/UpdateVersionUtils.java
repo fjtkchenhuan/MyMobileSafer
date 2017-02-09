@@ -42,6 +42,7 @@ public class UpdateVersionUtils {
     private static final int MESSAGE_SHOEW_DIALOG = 104;
     protected static final int MESSAGE_ENTERHOME = 105;
     private static final String BASE_URL="http://mobilenews.sinaapp.com/updateinfo.json";
+    private static final int MESSAGE_URL_ERROR = 106;
 
     /*本地版本号*/
     private String mVersion;
@@ -81,6 +82,10 @@ public class UpdateVersionUtils {
                     context.startActivity(intent);
                     context.finish();
                     break;
+                case MESSAGE_URL_ERROR:
+                    Toast.makeText(context, "url错误", Toast.LENGTH_SHORT).show();
+                    enterHome();
+                    break;
                 default:
                     enterHome();
                     break;
@@ -115,6 +120,9 @@ public class UpdateVersionUtils {
                     // 版本号不一致
                     handler.sendEmptyMessage(MESSAGE_SHOEW_DIALOG);
                 }
+            }
+            else {
+                handler.sendEmptyMessage(MESSAGE_URL_ERROR);
             }
         }catch (IOException e){
             handler.sendEmptyMessage(MESSAGE_IO_EEOR);
