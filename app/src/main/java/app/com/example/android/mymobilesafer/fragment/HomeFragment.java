@@ -1,20 +1,29 @@
-package app.com.example.android.mymobilesafer;
+package app.com.example.android.mymobilesafer.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
+import app.com.example.android.mymobilesafer.adapter.HomeAdapter;
+import app.com.example.android.mymobilesafer.R;
 import app.com.example.android.mymobilesafer.dialog.InterPasswordDialog;
 import app.com.example.android.mymobilesafer.dialog.SetUpPasswordDialog;
 import app.com.example.android.mymobilesafer.utils.MD5Utils;
+import app.com.example.android.mymobilesafer.utils.ToastUtils;
 
-public class HomeActivity extends AppCompatActivity {
+import static android.content.Context.MODE_PRIVATE;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class HomeFragment extends Fragment {
 
     private GridView gridView;
     private long mExitTime;
@@ -22,19 +31,26 @@ public class HomeActivity extends AppCompatActivity {
     //存储设置文件
     private SharedPreferences msharedPreferences;
 
+    public HomeFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //全屏
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
 
-        msharedPreferences = getSharedPreferences("config",MODE_PRIVATE);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        gridView= (GridView) findViewById(R.id.gv_home);
+        msharedPreferences = getActivity().getSharedPreferences("config",MODE_PRIVATE);
+
+        gridView= (GridView) view.findViewById(R.id.gv_home);
 
         //填充GridView
-        gridView.setAdapter(new HomeAdapter(HomeActivity.this));
+        gridView.setAdapter(new HomeAdapter(getActivity()));
         //单击事件
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,7 +82,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     /**
@@ -75,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
      */
 
     public void showSetUpPasswordDialog(){
-        final SetUpPasswordDialog msetPwdDialog = new SetUpPasswordDialog(HomeActivity.this);
+        final SetUpPasswordDialog msetPwdDialog = new SetUpPasswordDialog(getActivity());
         msetPwdDialog.setCallBack(new SetUpPasswordDialog.MyCallBack(){
             @Override
             public void ok() {
@@ -89,10 +104,10 @@ public class HomeActivity extends AppCompatActivity {
                         //显示输入密码对话框
                         showInterPasswordDialog();
                     } else {
-                        Toast.makeText(HomeActivity.this, "两次密码不一致", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(getActivity(),"两次密码不一致");
                     }
                 } else {
-                    Toast.makeText(HomeActivity.this, "两次密码不一致", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToast(getActivity(),"两次密码不一致");
                 }
             }
 
@@ -112,19 +127,19 @@ public class HomeActivity extends AppCompatActivity {
      */
     public void showInterPasswordDialog(){
         final String password = getPassword();
-        final InterPasswordDialog mInterPasswordDialog =  new InterPasswordDialog(HomeActivity.this);
+        final InterPasswordDialog mInterPasswordDialog =  new InterPasswordDialog(getContext());
 
         mInterPasswordDialog.setCallBack(new InterPasswordDialog.MyCallBack() {
             @Override
             public void confirm() {
                 if(TextUtils.isEmpty(mInterPasswordDialog.getPassword())){
-                    Toast.makeText(HomeActivity.this,"密码不能为空", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToast(getActivity(),"密码不能为空");
                 }else if(password.equals(MD5Utils.encode(mInterPasswordDialog.getPassword()))){
                     //进入防盗界面
-                    Toast.makeText(HomeActivity.this,"成功进入防盗界面", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToast(getActivity(),"成功进入防盗界面");
                 }else{
                     mInterPasswordDialog.dismiss();
-                    Toast.makeText(HomeActivity.this,"密码错误，请重新输入", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToast(getActivity(),"密码错误，请重新输入");
                 }
             }
 
@@ -170,23 +185,18 @@ public class HomeActivity extends AppCompatActivity {
 
     //按两次返回键退出程序
 
-    /**
-     * Take care of calling onBackPressed() for pre-Eclair platforms.
-     *
-     * @param keyCode
-     * @param event
-     */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode== KeyEvent.KEYCODE_BACK){
-            if((System.currentTimeMillis()-mExitTime)<2000){
-                System.exit(0);
-            }else{
-                Toast.makeText(this,"再按一次退出程序", Toast.LENGTH_SHORT).show();
-                mExitTime= System.currentTimeMillis();
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if(keyCode== KeyEvent.KEYCODE_BACK){
+//            if((System.currentTimeMillis()-mExitTime)<2000){
+//                System.exit(0);
+//            }else{
+//                Toast.makeText(this,"再按一次退出程序", Toast.LENGTH_SHORT).show();
+//                mExitTime= System.currentTimeMillis();
+//            }
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 }

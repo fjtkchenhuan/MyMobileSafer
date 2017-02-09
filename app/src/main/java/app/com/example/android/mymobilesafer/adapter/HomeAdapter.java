@@ -1,4 +1,4 @@
-package app.com.example.android.mymobilesafer;
+package app.com.example.android.mymobilesafer.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import app.com.example.android.mymobilesafer.R;
 
 /**
  * Created by QiWangming on 2015/10/15.

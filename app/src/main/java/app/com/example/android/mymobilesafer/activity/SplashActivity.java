@@ -1,4 +1,4 @@
-package app.com.example.android.mymobilesafer;
+package app.com.example.android.mymobilesafer.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import app.com.example.android.mymobilesafer.R;
 import app.com.example.android.mymobilesafer.utils.MyUtils;
 import app.com.example.android.mymobilesafer.utils.UpdateVersionUtils;
 

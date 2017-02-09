@@ -23,9 +23,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import app.com.example.android.mymobilesafer.HomeActivity;
+import app.com.example.android.mymobilesafer.activity.HomeActivity;
 import app.com.example.android.mymobilesafer.R;
-import app.com.example.android.mymobilesafer.VersionEntity;
+import app.com.example.android.mymobilesafer.bean.VersionEntity;
 import app.com.example.android.mymobilesafer.utils.DownLoadUtils.MyCallBack;
 
 /**

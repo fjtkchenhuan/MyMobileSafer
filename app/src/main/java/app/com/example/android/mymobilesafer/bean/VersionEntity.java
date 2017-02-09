@@ -1,4 +1,4 @@
-package app.com.example.android.mymobilesafer;
+package app.com.example.android.mymobilesafer.bean;
 
 /**
  * Created by QiWangming on 2015/10/15.
